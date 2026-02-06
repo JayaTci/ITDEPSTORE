@@ -56,10 +56,6 @@
       background-color: #ffffff35;
     }
 
-    body.light .status-btn {
-      border: 1px solid #d0d0d0;
-    }
-
     body.light .price {
       color: #2d6a4f;
     }
@@ -109,10 +105,6 @@
 
     body.dark .btn-toggle-theme:hover {
       background-color: #ffffff22;
-    }
-
-    body.dark .status-btn {
-      border: 1px solid #3a3a50;
     }
 
     body.dark .price {
@@ -297,8 +289,6 @@
     .status-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 8px;
     }
 
     .status-badge {
@@ -320,20 +310,6 @@
       color: #721c24;
     }
 
-    .status-btn {
-      background: none;
-      padding: 5px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.72rem;
-      color: inherit;
-      transition: background-color 0.2s;
-      white-space: nowrap;
-    }
-
-    .status-btn:hover {
-      background-color: rgba(128, 128, 128, 0.15);
-    }
 
     /* ── Footer ── */
     .footer {
@@ -383,7 +359,6 @@
         const hasImage = product.image && product.image.trim() !== "";
         const statusClass = product.available ? "available" : "out-of-stock";
         const statusText = product.available ? "Available" : "Out of Stock";
-        const toggleText = product.available ? "Mark Out of Stock" : "Mark Available";
         const formattedPrice = product.price.toFixed(2);
 
         card.innerHTML = `
@@ -403,24 +378,12 @@
             <hr class="divider">
             <div class="status-row">
               <span class="status-badge ${statusClass}">${statusText}</span>
-              <button class="status-btn" onclick="toggleAvailability(${product.id})">
-                ${toggleText}
-              </button>
             </div>
           </div>
         `;
 
         grid.appendChild(card);
       });
-    }
-
-    // ── Toggle Availability ──
-    function toggleAvailability(id) {
-      const product = products.find((p) => p.id === id);
-      if (product) {
-        product.available = !product.available;
-        renderProducts();
-      }
     }
 
     // ── Theme Toggle ──
