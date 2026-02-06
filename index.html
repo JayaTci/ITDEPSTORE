@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Department Store</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Light Theme (default) ── */
+    body.light {
+      background-color: #f0f2f5;
+      color: #1a1a2e;
+    }
+
+    body.light .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d2d5e 100%);
+      color: #ffffff;
+    }
+
+    body.light .product-card {
+      background-color: #ffffff;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      border: 1px solid #e8e8e8;
+    }
+
+    body.light .product-card:hover {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    body.light .image-placeholder {
+      background-color: #e9ecef;
+      color: #8a8a8a;
+      border-bottom: 1px solid #e8e8e8;
+    }
+
+    body.light .btn-toggle-theme {
+      background-color: #ffffff20;
+      color: #ffffff;
+      border: 1px solid #ffffff40;
+    }
+
+    body.light .btn-toggle-theme:hover {
+      background-color: #ffffff35;
+    }
+
+    body.light .status-btn {
+      border: 1px solid #d0d0d0;
+    }
+
+    body.light .price {
+      color: #2d6a4f;
+    }
+
+    body.light .divider {
+      border-color: #eee;
+    }
+
+    body.light .footer {
+      background-color: #1a1a2e;
+      color: #ffffff80;
+    }
+
+    /* ── Dark Theme ── */
+    body.dark {
+      background-color: #0d0d14;
+      color: #e0e0e0;
+    }
+
+    body.dark .header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #12122a 100%);
+      color: #e0e0e0;
+    }
+
+    body.dark .product-card {
+      background-color: #1a1a2d;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      border: 1px solid #2a2a40;
+    }
+
+    body.dark .product-card:hover {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      border-color: #3a3a55;
+    }
+
+    body.dark .image-placeholder {
+      background-color: #22223a;
+      color: #555570;
+      border-bottom: 1px solid #2a2a40;
+    }
+
+    body.dark .btn-toggle-theme {
+      background-color: #ffffff12;
+      color: #e0e0e0;
+      border: 1px solid #ffffff20;
+    }
+
+    body.dark .btn-toggle-theme:hover {
+      background-color: #ffffff22;
+    }
+
+    body.dark .status-btn {
+      border: 1px solid #3a3a50;
+    }
+
+    body.dark .price {
+      color: #52b788;
+    }
+
+    body.dark .divider {
+      border-color: #2a2a40;
+    }
+
+    body.dark .footer {
+      background-color: #0a0a12;
+      color: #ffffff40;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 40px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .header h1 {
+      font-size: 1.6rem;
+      letter-spacing: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .btn-toggle-theme {
+      padding: 10px 22px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background-color 0.2s;
+      white-space: nowrap;
+    }
+
+    /* ── Products Grid ── */
+    .products-section {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 48px 24px;
+      flex: 1;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      opacity: 0.5;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 960px) {
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+        margin: 0 auto;
+      }
+      .header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+        padding: 20px 24px;
+      }
+    }
+
+    /* ── Product Card ── */
+    .product-card {
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.25s ease, background-color 0.3s, box-shadow 0.25s ease, border-color 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+    }
+
+    /* Fixed-size image placeholder */
+    .image-placeholder {
+      width: 100%;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .image-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .image-placeholder .placeholder-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+
+    .placeholder-icon {
+      font-size: 2.2rem;
+      opacity: 0.4;
+    }
+
+    .placeholder-size {
+      font-size: 0.75rem;
+      opacity: 0.6;
+      letter-spacing: 1px;
+    }
+
+    /* ── Card Body ── */
+    .card-body {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .product-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.4;
+      min-height: 2.8em;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .price {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-top: 8px;
+      transition: color 0.3s;
+    }
+
+    .price .currency {
+      font-size: 0.85rem;
+      font-weight: 600;
+      vertical-align: top;
+      position: relative;
+      top: 2px;
+      margin-right: 1px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid;
+      margin: 14px 0;
+      transition: border-color 0.3s;
+    }
+
+    /* ── Availability Status ── */
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .status-badge.available {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .status-badge.out-of-stock {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .status-btn {
+      background: none;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.72rem;
+      color: inherit;
+      transition: background-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .status-btn:hover {
+      background-color: rgba(128, 128, 128, 0.15);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 28px 20px;
+      font-size: 0.8rem;
+      transition: background-color 0.3s, color 0.3s;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body class="light">
+
+  <!-- Header -->
+  <header class="header">
+    <h1>IT Department Store</h1>
+    <button class="btn-toggle-theme" onclick="toggleTheme()">Switch to Dark Mode</button>
+  </header>
+
+  <!-- Products -->
+  <main class="products-section">
+    <p class="section-title">Our Products</p>
+    <div class="products-grid" id="productsGrid"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">&copy; 2026 IT Department Store. All rights reserved.</footer>
+
+  <script>
+    // ── Product Data (edit prices here) ──
+    const products = [
+      { id: 1, name: "Chippy Corn Tubes",                                  image: "assets/chippy.jpg",  price: 20.00, available: true  },
+      { id: 2, name: "Magic Chips Thin & Crispy BBQ",                      image: "assets/chips1.jpg",  price: 15.00, available: true  },
+      { id: 3, name: "Magic Chips Thin & Crispy Sour Cream & Onion",       image: "assets/chips2.jpg",  price: 15.00, available: true  },
+      { id: 4, name: "Pancit Canton Payless XTRA BIG Chili Cheese Flavor", image: "assets/canton.jpg",  price: 30.00, available: false },
+    ];
+
+    // ── Render Products ──
+    function renderProducts() {
+      const grid = document.getElementById("productsGrid");
+      grid.innerHTML = "";
+
+      products.forEach((product) => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+
+        const hasImage = product.image && product.image.trim() !== "";
+        const statusClass = product.available ? "available" : "out-of-stock";
+        const statusText = product.available ? "Available" : "Out of Stock";
+        const toggleText = product.available ? "Mark Out of Stock" : "Mark Available";
+        const formattedPrice = product.price.toFixed(2);
+
+        card.innerHTML = `
+          <div class="image-placeholder">
+            ${
+              hasImage
+                ? `<img src="${product.image}" alt="${product.name}" style="display:block;">`
+                : `<div class="placeholder-text">
+                     <span class="placeholder-icon">&#128247;</span>
+                     <span class="placeholder-size">240 &times; 240</span>
+                   </div>`
+            }
+          </div>
+          <div class="card-body">
+            <div class="product-name">${product.name}</div>
+            <div class="price"><span class="currency">&#8369;</span>${formattedPrice}</div>
+            <hr class="divider">
+            <div class="status-row">
+              <span class="status-badge ${statusClass}">${statusText}</span>
+              <button class="status-btn" onclick="toggleAvailability(${product.id})">
+                ${toggleText}
+              </button>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    // ── Toggle Availability ──
+    function toggleAvailability(id) {
+      const product = products.find((p) => p.id === id);
+      if (product) {
+        product.available = !product.available;
+        renderProducts();
+      }
+    }
+
+    // ── Theme Toggle ──
+    function toggleTheme() {
+      const body = document.body;
+      const btn = document.querySelector(".btn-toggle-theme");
+
+      if (body.classList.contains("light")) {
+        body.classList.replace("light", "dark");
+        btn.textContent = "Switch to Light Mode";
+      } else {
+        body.classList.replace("dark", "light");
+        btn.textContent = "Switch to Dark Mode";
+      }
+    }
+
+    // ── Initial Render ──
+    renderProducts();
+  </script>
+</body>
+</html>
